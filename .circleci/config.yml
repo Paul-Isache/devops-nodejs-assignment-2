@@ -3,7 +3,21 @@ orbs:
   aws-cli: circleci/aws-cli@0.1.4
   aws-ecs: circleci/aws-ecs@1.0.5
 jobs:
-  update-tag:
+  build:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: install-packages
+          command: npm install
+      - run:
+          name: test
+          command: npm run test    
+      - run:
+          name: build
+          command: npm run build  
+  deploy:
     docker:
       - image: 'circleci/node:14.9.0'
     steps:
@@ -13,3 +27,15 @@ jobs:
           aws-region: $AWS_REGION
       - aws-ecs/update-task-definition-from-json:
           task-definition-json: task-definition.json
+workflows:
+  version: 2.1
+  build-deploys:
+    jobs:
+      - build
+      - deploy:
+          # type: approval
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
