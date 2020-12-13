@@ -1,17 +1,44 @@
 {
-    "family": "webserver",
-    "containerDefinitions": [
-        {
-            "name": "web",
-            "image": "nginx",
-            "memory": "100",
-            "cpu": "99"
-        }
-    ],
     "requiresCompatibilities": [
         "FARGATE"
     ],
+    "inferenceAccelerators": [],
+    "containerDefinitions": [
+        {
+            "name": "ecs-devops-sandbox",
+            "image": "ecs-devops-sandbox-repository:00000",
+            "resourceRequirements": null,
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": "3000",
+                    "hostPortgit": "443",
+                    "protocol": "tcp"
+                }
+                
+            ]
+        },
+        {
+            "name": "ecs-devops-sandbox",
+            "image": "ecs-devops-sandbox-repository:00000",
+            "resourceRequirements": null,
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": "3000",
+                    "hostPort": "443",
+                    "protocol": "tcp"
+                }
+                
+            ]
+        }
+    ],
+    "volumes": [],
     "networkMode": "awsvpc",
     "memory": "512",
-    "cpu": "256"
+    "cpu": "256",
+    "executionRoleArn": "arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/ecs-devops-execution-role",
+    "family": "ecs-devops-sandbox-task-definition",
+    "taskRoleArn": "",
+    "placementConstraints": []
 }
